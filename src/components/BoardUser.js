@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
+// import React from "react";
+import { Navigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
 const BoardUser = () => {
   const [content, setContent] = useState("");
+  const { user: currentUser } = useSelector((state) => state.auth);
 
+  
   useEffect(() => {
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
     UserService.getUserBoard().then(
       (response) => {
         setContent(response.data);
+        console.log(response.data)
       },
       (error) => {
         const _content =

@@ -10,6 +10,7 @@ const BoardModerator = () => {
     UserService.getModeratorBoard().then(
       (response) => {
         setContent(response.data);
+        console.log(response.data)
       },
       (error) => {
         const _content =
