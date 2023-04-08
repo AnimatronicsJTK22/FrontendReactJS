@@ -16,6 +16,7 @@ import BoardAdmin from "./components/BoardAdmin";
 import { logout } from "./slices/auth";
 
 import EventBus from "./common/EventBus";
+import DiariesList from "./components/DiariesList";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -83,6 +84,14 @@ const App = () => {
                 </Link>
               </li>
             )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/diarylist"} className="nav-link">
+                  Diary List
+                </Link>
+              </li>
+            )}
           </div>
 
           {currentUser ? (
@@ -123,6 +132,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/user" element={<BoardUser />} />
+            <Route path="/diarylist" element={<DiariesList />} />
             <Route path="/mod" element={<BoardModerator />} />
             <Route path="/admin" element={<BoardAdmin />} />
           </Routes>
