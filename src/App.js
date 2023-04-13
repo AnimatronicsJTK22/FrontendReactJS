@@ -12,11 +12,17 @@ import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
 import BoardModerator from "./components/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin";
+import TutorialsList from "./components/tutorials-list.component"
+import AddTutorial from "./components/add-tutorial.component"
+import Tutorial from "./components/tutorial.component"
 
 import { logout } from "./slices/auth";
 
 import EventBus from "./common/EventBus";
-import DiariesList from "./components/DiariesList";
+import DiaryListComponent from "./components/diary-list.component";
+import AddDiaryComponent from "./components/add-diary.component";
+import UserTable from "./slices/userTable";
+// import DiariesList from "./components/DiariesList";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -87,8 +93,16 @@ const App = () => {
 
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/diarylist"} className="nav-link">
-                  Diary List
+                <Link to={"/diary"} className="nav-link">
+                  Diary
+                </Link>
+              </li>
+            )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/add"} className="nav-link">
+                  Add Diary
                 </Link>
               </li>
             )}
@@ -131,10 +145,14 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
-            <Route path="/diarylist" element={<DiariesList />} />
+            {/* <Route path="/user" element={<BoardUser />} /> */}
+            <Route path="/user" element={<UserTable />} />
+            {/* <Route path="/diarylist" element={<DiariesList />} /> */}
             <Route path="/mod" element={<BoardModerator />} />
             <Route path="/admin" element={<BoardAdmin />} />
+            <Route path="/diary" element={<DiaryListComponent/>} />
+            <Route path="/add" element={<AddDiaryComponent/>} />
+            <Route path="/tutorials/:id" element={<Tutorial/>} />
           </Routes>
         </div>
       </div>

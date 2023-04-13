@@ -1,85 +1,85 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import DiariesDataService from "../services/diary.service";
+import DiaryDataService from "../services/diary.service";
 
 const initialState = [];
 
-export const createDiaries = createAsyncThunk(
-  "diaries/create",
+export const createDiary = createAsyncThunk(
+  "diary/create",
   async ({ title, content }) => {
-    const res = await DiariesDataService.create({ title, content });
+    const res = await DiaryDataService.create({ title, content });
     return res.data;
   }
 );
 
-export const retrieveDiaries = createAsyncThunk(
-  "diaries/retrieve",
+export const retrieveDiary = createAsyncThunk(
+  "diary/retrieve",
   async () => {
-    const res = await DiariesDataService.getAll();
+    const res = await DiaryDataService.getAll();
     return res.data;
   }
 );
 
-export const updateDiaries = createAsyncThunk(
-  "diaries/update",
+export const updateDiary = createAsyncThunk(
+  "diary/update",
   async ({ id, data }) => {
-    const res = await DiariesDataService.update(id, data);
+    const res = await DiaryDataService.update(id, data);
     return res.data;
   }
 );
 
-export const deleteDiaries = createAsyncThunk(
-  "diaries/delete",
+export const deleteDiary = createAsyncThunk(
+  "diary/delete",
   async ({ id }) => {
-    await DiariesDataService.remove(id);
+    await DiaryDataService.delete(id);
     return { id };
   }
 );
 
-export const deleteAllDiaries = createAsyncThunk(
-  "diaries/deleteAll",
+export const deleteAllDiary = createAsyncThunk(
+  "diary/deleteAll",
   async () => {
-    const res = await DiariesDataService.removeAll();
+    const res = await DiaryDataService.deleteAll();
     return res.data;
   }
 );
 
-export const findDiariesByTitle = createAsyncThunk(
-  "diaries/findByTitle",
+export const findDiaryByTitle = createAsyncThunk(
+  "diary/findByTitle",
   async ({ title }) => {
-    const res = await DiariesDataService.findByTitle(title);
+    const res = await DiaryDataService.findByTitle(title);
     return res.data;
   }
 );
 
-const diariesSlice = createSlice({
-  name: "diaries",
+const diarySlice = createSlice({
+  name: "diary",
   initialState,
   extraReducers: {
-    [createDiaries.fulfilled]: (state, action) => {
+    [createDiary.fulfilled]: (state, action) => {
       state.push(action.payload);
     },
-    [retrieveDiaries.fulfilled]: (state, action) => {
+    [retrieveDiary.fulfilled]: (state, action) => {
       return [...action.payload];
     },
-    [updateDiaries.fulfilled]: (state, action) => {
-      const index = state.findIndex(tutorial => tutorial.id === action.payload.id);
+    [updateDiary.fulfilled]: (state, action) => {
+      const index = state.findIndex(diary => diary.id === action.payload.id);
       state[index] = {
         ...state[index],
         ...action.payload,
       };
     },
-    [deleteDiaries.fulfilled]: (state, action) => {
+    [deleteDiary.fulfilled]: (state, action) => {
       let index = state.findIndex(({ id }) => id === action.payload.id);
       state.splice(index, 1);
     },
-    [deleteAllDiaries.fulfilled]: (state, action) => {
+    [deleteAllDiary.fulfilled]: (state, action) => {
       return [];
     },
-    [findDiariesByTitle.fulfilled]: (state, action) => {
+    [findDiaryByTitle.fulfilled]: (state, action) => {
       return [...action.payload];
     },
   },
 });
 
-const { reducer } = diariesSlice;
+const { reducer } = diarySlice;
 export default reducer;
