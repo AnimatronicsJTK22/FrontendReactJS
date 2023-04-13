@@ -1,75 +1,96 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import {
-  retrieveDiary,
-  findDiaryByTitle,
-  deleteAllDiary,
-} from "../slices/diary";
+import DiaryDataService from "../services/diary.service";
 import { Link } from "react-router-dom";
 
-class DiaryList extends Component {
+export default class DiariesList extends Component {
   constructor(props) {
     super(props);
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
-    this.refreshData = this.refreshData.bind(this);
+    this.retrieveDiaries = this.retrieveDiaries.bind(this);
+    this.refreshList = this.refreshList.bind(this);
     this.setActiveDiary = this.setActiveDiary.bind(this);
-    this.findByTitle = this.findByTitle.bind(this);
     this.removeAllDiary = this.removeAllDiary.bind(this);
+    this.searchTitle = this.searchTitle.bind(this);
 
     this.state = {
+      diaries: [],
       currentDiary: null,
       currentIndex: -1,
-      searchTitle: "",
+      searchTitle: ""
     };
   }
 
   componentDidMount() {
-    this.props.retrieveDiary();
+    this.retrieveDiaries();
   }
 
   onChangeSearchTitle(e) {
     const searchTitle = e.target.value;
 
     this.setState({
-      searchTitle: searchTitle,
+      searchTitle: searchTitle
     });
   }
 
-  refreshData() {
+  retrieveDiaries() {
+    DiaryDataService.getAll()
+      .then(response => {
+        this.setState({
+          diaries: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  refreshList() {
+    this.retrieveDiaries();
     this.setState({
       currentDiary: null,
-      currentIndex: -1,
+      currentIndex: -1
     });
   }
 
   setActiveDiary(diary, index) {
     this.setState({
       currentDiary: diary,
-      currentIndex: index,
+      currentIndex: index
     });
   }
 
   removeAllDiary() {
-    this.props
-      .deleteAllDiary()
-      .then((response) => {
-        console.log(response);
-        this.refreshData();
+    DiaryDataService.deleteAll()
+      .then(response => {
+        console.log(response.data);
+        this.refreshList();
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
       });
   }
 
-  findByTitle() {
-    this.refreshData();
+  searchTitle() {
+    this.setState({
+      currentDiary: null,
+      currentIndex: -1
+    });
 
-    this.props.findDiaryByTitle({ title: this.state.searchTitle });
+    DiaryDataService.findByTitle(this.state.searchTitle)
+      .then(response => {
+        this.setState({
+          diaries: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   render() {
-    const { searchTitle, currentDiary, currentIndex } = this.state;
-    const { diaries } = this.props;
+    const { searchTitle, diaries, currentDiary, currentIndex } = this.state;
 
     return (
       <div className="list row">
@@ -86,7 +107,7 @@ class DiaryList extends Component {
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={this.findByTitle}
+                onClick={this.searchTitle}
               >
                 Search
               </button>
@@ -122,7 +143,7 @@ class DiaryList extends Component {
         <div className="col-md-6">
           {currentDiary ? (
             <div>
-              <h4>diary</h4>
+              <h4>Diary</h4>
               <div>
                 <label>
                   <strong>Title:</strong>
@@ -134,6 +155,12 @@ class DiaryList extends Component {
                   <strong>Content:</strong>
                 </label>{" "}
                 {currentDiary.content}
+              </div>
+              <div>
+                <label>
+                  <strong>Owner:</strong>
+                </label>{" "}
+                {currentDiary.owner}
               </div>
               <div>
                 <label>
@@ -152,7 +179,7 @@ class DiaryList extends Component {
           ) : (
             <div>
               <br />
-              <p>Please click on a diary...</p>
+              <p>Please click on a Diary...</p>
             </div>
           )}
         </div>
@@ -160,15 +187,3 @@ class DiaryList extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    diaries: state.diaries,
-  };
-};
-
-export default connect(mapStateToProps, {
-  retrieveDiary,
-  findDiaryByTitle,
-  deleteAllDiary,
-})(DiaryList);
