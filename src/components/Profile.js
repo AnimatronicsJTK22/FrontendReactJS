@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
@@ -13,7 +13,12 @@ const Profile = () => {
     <div className="container">
       <header className="jumbotron">
         <h3>
-          <strong>{currentUser.username}</strong> Profile
+          Selamat Datang{" "}
+          <strong>
+            {currentUser.username.charAt(0).toUpperCase() +
+              currentUser.username.slice(1)}
+          </strong>
+          !
         </h3>
       </header>
       <p>

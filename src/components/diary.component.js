@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { updateDiary, deleteDiary } from "../slices/diary";
 import DiaryDataService from "../services/diary.service";
 import { withRouter } from '../common/with-router';
 
@@ -8,20 +6,20 @@ class Diary extends Component {
   constructor(props) {
     super(props);
     this.onChangeTitle = this.onChangeTitle.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeContent = this.onChangeContent.bind(this);
     this.getDiary = this.getDiary.bind(this);
-    this.updateStatus = this.updateStatus.bind(this);
-    this.updateContent = this.updateContent.bind(this);
-    this.removeDiary = this.removeDiary.bind(this);
+    this.updateVisibility = this.updateVisibility.bind(this);
+    this.updateDiary = this.updateDiary.bind(this);
+    this.deleteDiary = this.deleteDiary.bind(this);
 
     this.state = {
       currentDiary: {
         id: null,
         title: "",
-        description: "",
-        published: false,
+        content: "",
+        visibility: false
       },
-      message: "",
+      message: ""
     };
   }
 
@@ -32,91 +30,90 @@ class Diary extends Component {
   onChangeTitle(e) {
     const title = e.target.value;
 
-    this.setState(function (prevState) {
+    this.setState(function(prevState) {
       return {
         currentDiary: {
           ...prevState.currentDiary,
-          title: title,
-        },
+          title: title
+        }
       };
     });
   }
 
-  onChangeDescription(e) {
-    const description = e.target.value;
-
-    this.setState((prevState) => ({
+  onChangeContent(e) {
+    const content = e.target.value;
+    
+    this.setState(prevState => ({
       currentDiary: {
         ...prevState.currentDiary,
-        description: description,
-      },
+        content: content
+      }
     }));
   }
 
   getDiary(id) {
     DiaryDataService.get(id)
-      .then((response) => {
+      .then(response => {
         this.setState({
-          currentDiary: response.data,
+          currentDiary: response.data
         });
         console.log(response.data);
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
       });
   }
 
-  updateStatus(status) {
+  updateVisibility(status) {
     var data = {
       id: this.state.currentDiary.id,
       title: this.state.currentDiary.title,
-      description: this.state.currentDiary.description,
-      published: status,
+      content: this.state.currentDiary.content,
+      visibility: status
     };
 
-    this.props
-      .updateDiary({ id: this.state.currentDiary.id, data })
-      .unwrap()
-      .then((reponse) => {
-        console.log(reponse);
-
-        this.setState((prevState) => ({
+    DiaryDataService.update(this.state.currentDiary.id, data)
+      .then(response => {
+        this.setState(prevState => ({
           currentDiary: {
             ...prevState.currentDiary,
-            published: status,
-          },
+            visibility: status
+          }
         }));
-
-        this.setState({ message: "The status was updated successfully!" });
+        console.log(response.data);
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
       });
   }
 
-  updateContent() {
-    this.props
-      .updateDiary({ id: this.state.currentDiary.id, data: this.state.currentDiary })
-      .unwrap()
-      .then((reponse) => {
-        console.log(reponse);
-        
-        this.setState({ message: "The diary was updated successfully!" });
+  updateDiary() {
+    DiaryDataService.update(
+      this.state.currentDiary.id,
+      this.state.currentDiary
+    )
+      .then(response => {
+        console.log(response.data);
+        this.setState({
+          message: "The diary was updated successfully!"
+        });
       })
-      .catch((e) => {
+      .catch(e => {
         console.log(e);
       });
   }
 
-  removeDiary() {
-    this.props
-      .deleteDiary({ id: this.state.currentDiary.id })
-      .then(() => {
-        this.props.router.navigate('/diaries');
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  deleteDiary() {
+    if (window.confirm("Are you sure to delete this diary?")) {
+      DiaryDataService.delete(this.state.currentDiary.id)
+        .then(response => {
+          console.log(response.data);
+          this.props.router.navigate('/diary');
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
   }
 
   render() {
@@ -139,13 +136,13 @@ class Diary extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="content">Content</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="description"
-                  value={currentDiary.description}
-                  onChange={this.onChangeDescription}
+                  id="content"
+                  value={currentDiary.content}
+                  onChange={this.onChangeContent}
                 />
               </div>
 
@@ -153,21 +150,21 @@ class Diary extends Component {
                 <label>
                   <strong>Status:</strong>
                 </label>
-                {currentDiary.published ? "Published" : "Pending"}
+                {currentDiary.visibility ? "Public" : "Private"}
               </div>
             </form>
 
-            {currentDiary.published ? (
+            {currentDiary.visibility ? (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => this.updateStatus(false)}
+                onClick={() => this.updateVisibility(false)}
               >
                 UnPublish
               </button>
             ) : (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => this.updateStatus(true)}
+                onClick={() => this.updateVisibility(true)}
               >
                 Publish
               </button>
@@ -175,7 +172,7 @@ class Diary extends Component {
 
             <button
               className="badge badge-danger mr-2"
-              onClick={this.removeDiary}
+              onClick={this.deleteDiary}
             >
               Delete
             </button>
@@ -183,7 +180,7 @@ class Diary extends Component {
             <button
               type="submit"
               className="badge badge-success"
-              onClick={this.updateContent}
+              onClick={this.updateDiary}
             >
               Update
             </button>
@@ -200,4 +197,4 @@ class Diary extends Component {
   }
 }
 
-export default connect(null, { updateDiary, deleteDiary })(withRouter(Diary));
+export default withRouter(Diary);

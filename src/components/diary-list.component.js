@@ -16,7 +16,7 @@ export default class DiariesList extends Component {
       diaries: [],
       currentDiary: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchTitle: "",
     };
   }
 
@@ -28,19 +28,19 @@ export default class DiariesList extends Component {
     const searchTitle = e.target.value;
 
     this.setState({
-      searchTitle: searchTitle
+      searchTitle: searchTitle,
     });
   }
 
   retrieveDiaries() {
     DiaryDataService.getAll()
-      .then(response => {
+      .then((response) => {
         this.setState({
-          diaries: response.data
+          diaries: response.data,
         });
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -49,42 +49,44 @@ export default class DiariesList extends Component {
     this.retrieveDiaries();
     this.setState({
       currentDiary: null,
-      currentIndex: -1
+      currentIndex: -1,
     });
   }
 
   setActiveDiary(diary, index) {
     this.setState({
       currentDiary: diary,
-      currentIndex: index
+      currentIndex: index,
     });
   }
 
   removeAllDiary() {
-    DiaryDataService.deleteAll()
-      .then(response => {
-        console.log(response.data);
-        this.refreshList();
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    if (window.confirm("Are you sure you want to delete all diaries? (admin only)")){
+      DiaryDataService.deleteAll()
+        .then((response) => {
+          console.log(response.data);
+          this.refreshList();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }
 
   searchTitle() {
     this.setState({
       currentDiary: null,
-      currentIndex: -1
+      currentIndex: -1,
     });
 
     DiaryDataService.findByTitle(this.state.searchTitle)
-      .then(response => {
+      .then((response) => {
         this.setState({
-          diaries: response.data
+          diaries: response.data,
         });
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -94,26 +96,6 @@ export default class DiariesList extends Component {
 
     return (
       <div className="list row">
-        <div className="col-md-8">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by title"
-              value={searchTitle}
-              onChange={this.onChangeSearchTitle}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchTitle}
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="col-md-6">
           <h4>Diary List</h4>
 
@@ -134,11 +116,14 @@ export default class DiariesList extends Component {
           </ul>
 
           <button
-            className="m-3 btn btn-sm btn-danger"
+            className="m-3 btn btn-sm btn-warning"
             onClick={this.removeAllDiary}
           >
             Remove All
           </button>
+          <Link to={"/menu"} className="btn btn-sm btn-danger">
+            Kembali
+          </Link>
         </div>
         <div className="col-md-6">
           {currentDiary ? (
@@ -166,11 +151,11 @@ export default class DiariesList extends Component {
                 <label>
                   <strong>Status:</strong>
                 </label>{" "}
-                {currentDiary.visibility ? "Visible" : "Pending"}
+                {currentDiary.visibility ? "Public" : "Private"}
               </div>
 
               <Link
-                to={"/diaries/" + currentDiary.id}
+                to={"/diary/" + currentDiary.id}
                 className="badge badge-warning"
               >
                 Edit
@@ -183,6 +168,7 @@ export default class DiariesList extends Component {
             </div>
           )}
         </div>
+        <p>*Remove all hanya dapat dilakukan oleh admin</p>
       </div>
     );
   }

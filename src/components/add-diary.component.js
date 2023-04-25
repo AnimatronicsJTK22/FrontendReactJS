@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createDiary } from "../slices/diary";
+import { Link } from "react-router-dom";
+import { MdCheck, MdArrowBack } from "react-icons/md";
 
 class AddDiary extends Component {
   constructor(props) {
@@ -71,6 +73,9 @@ class AddDiary extends Component {
             <button className="btn btn-success" onClick={this.newDiary}>
               Add
             </button>
+            {/* <Link to={"/menu"} className="btn btn-danger">
+              Kembali
+            </Link> */}
           </div>
         ) : (
           <div>
@@ -89,20 +94,25 @@ class AddDiary extends Component {
 
             <div className="form-group">
               <label htmlFor="content">Content</label>
-              <input
-                type="text"
+              <textarea
                 className="form-control"
                 id="content"
                 required
                 value={this.state.content}
                 onChange={this.onChangeContent}
                 name="content"
-              />
+                rows="5"
+                cols="50"
+              ></textarea>
             </div>
 
-            <button onClick={this.saveDiary} className="btn btn-success">
-              Submit
+            <button onClick={this.saveDiary} className="btn btn-success mr-2">
+              <MdCheck /> Submit
             </button>
+            <Link to={"/menu"} className="btn btn-danger">
+              <MdArrowBack />
+              Kembali
+            </Link>
           </div>
         )}
       </div>

@@ -24,7 +24,12 @@ const Home = () => {
   return (
     <div className="container">
       <header className="jumbotron">
-        <h3>{content}</h3>
+        <h3>Diary and Money Discipline Web Application</h3>
+        <hr></hr>
+        <p></p>
+        <p>1. 221524018 Muhammad Azharuddin Hamid</p>
+        <p>2. 221524019 Muhammad Fikri Nur Sya'Bani</p>
+        <p>3. 221524027 Rayhan Fanez Fathiadi</p>
       </header>
     </div>
   );
