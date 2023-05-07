@@ -24,12 +24,20 @@ const Home = () => {
   return (
     <div className="container">
       <header className="jumbotron">
-        <h3>Diary and Money Discipline Web Application</h3>
+        <div className="text-center">
+          <img src={process.env.PUBLIC_URL + '/diamond-png-image-pngfre-24.png'} width={'500'} height={'400'} alt="Diamond Logo" />
+          <h3 style={{ fontFamily: "Galimer", fontWeight:'bold'}}>
+            Diary and Money Discipline
+          </h3>
+        </div>
         <hr></hr>
         <p></p>
-        <p>1. 221524018 Muhammad Azharuddin Hamid</p>
-        <p>2. 221524019 Muhammad Fikri Nur Sya'Bani</p>
-        <p>3. 221524027 Rayhan Fanez Fathiadi</p>
+        <div className="text-center" style={{fontFamily:"Galimer"}}>
+          {/* <p style={{fontWeight:'bold'}}>Member:</p> */}
+          <p>221524018 Muhammad Azharuddin Hamid</p>
+          <p>221524019 Muhammad Fikri Nur Sya'Bani</p>
+          <p>221524027 Rayhan Fanez Fathiadi</p>
+        </div>
       </header>
     </div>
   );

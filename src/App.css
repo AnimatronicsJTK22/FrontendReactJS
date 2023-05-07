@@ -31,3 +31,16 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.navbar-custom {
+  background-color: #044d91;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-icon .icon {
+  margin-right: 0.5rem;
+}

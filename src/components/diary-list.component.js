@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { FaTrashAlt } from 'react-icons/fa';
+import { BsArrowLeft, BsTextCenter } from 'react-icons/bs';
 import DiaryDataService from "../services/diary.service";
 import { Link } from "react-router-dom";
 
@@ -61,7 +63,11 @@ export default class DiariesList extends Component {
   }
 
   removeAllDiary() {
-    if (window.confirm("Are you sure you want to delete all diaries? (admin only)")){
+    if (
+      window.confirm(
+        "Are you sure you want to delete all diaries? (admin only)"
+      )
+    ) {
       DiaryDataService.deleteAll()
         .then((response) => {
           console.log(response.data);
@@ -92,16 +98,16 @@ export default class DiariesList extends Component {
   }
 
   render() {
-    const { searchTitle, diaries, currentDiary, currentIndex } = this.state;
-
+    const { diaries, currentDiary, currentIndex } = this.state;
+  
     return (
       <div className="list row">
         <div className="col-md-6">
-          <h4>Diary List</h4>
-
-          <ul className="list-group">
-            {diaries &&
-              diaries.map((diary, index) => (
+          <h4 className="text-center">Diary List</h4>
+  
+          {diaries.length ? (
+            <ul className="list-group">
+              {diaries.map((diary, index) => (
                 <li
                   className={
                     "list-group-item " +
@@ -113,15 +119,22 @@ export default class DiariesList extends Component {
                   {diary.title}
                 </li>
               ))}
-          </ul>
-
+            </ul>
+          ) : (
+            <div className="alert alert-info" role="alert">
+              Diary kosong..
+            </div>
+          )}
+  
           <button
-            className="m-3 btn btn-sm btn-warning"
+            className="m-3 btn btn-sm btn-warning btn-icon"
             onClick={this.removeAllDiary}
           >
+            <FaTrashAlt className="icon" />
             Remove All
           </button>
-          <Link to={"/menu"} className="btn btn-sm btn-danger">
+          <Link to={"/menudiary"} className="btn btn-sm btn-danger btn-icon">
+          <BsArrowLeft className="icon" />
             Kembali
           </Link>
         </div>
@@ -145,7 +158,18 @@ export default class DiariesList extends Component {
                 <label>
                   <strong>Owner:</strong>
                 </label>{" "}
-                {currentDiary.owner}
+                {currentDiary.owner.charAt(0).toUpperCase() +
+                  currentDiary.owner.slice(1)}
+              </div>
+              <div>
+                <label>
+                  <strong>Time:</strong>
+                </label>{" "}
+                {new Date(currentDiary.time).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "numeric",
+                  year: "numeric",
+                })}
               </div>
               <div>
                 <label>
@@ -153,7 +177,7 @@ export default class DiariesList extends Component {
                 </label>{" "}
                 {currentDiary.visibility ? "Public" : "Private"}
               </div>
-
+  
               <Link
                 to={"/diary/" + currentDiary.id}
                 className="badge badge-warning"
@@ -167,9 +191,9 @@ export default class DiariesList extends Component {
               <p>Please click on a Diary...</p>
             </div>
           )}
+          <p>*Remove all hanya dapat dilakukan oleh admin</p>
         </div>
-        <p>*Remove all hanya dapat dilakukan oleh admin</p>
       </div>
     );
   }
-}
+}  

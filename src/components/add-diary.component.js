@@ -70,12 +70,12 @@ class AddDiary extends Component {
         {this.state.submitted ? (
           <div>
             <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={this.newDiary}>
+            {/* <button className="btn btn-success" onClick={this.newDiary}>
               Add
-            </button>
-            {/* <Link to={"/menu"} className="btn btn-danger">
-              Kembali
-            </Link> */}
+            </button> */}
+            <Link to={"/diary"} className="btn btn-success" onClick={this.newDiary}>
+              Add
+            </Link>
           </div>
         ) : (
           <div>
@@ -106,11 +106,11 @@ class AddDiary extends Component {
               ></textarea>
             </div>
 
-            <button onClick={this.saveDiary} className="btn btn-success mr-2">
-              <MdCheck /> Submit
+            <button onClick={this.saveDiary} className="btn btn-success mr-2 btn-icon">
+              <MdCheck className="icon"/> Submit
             </button>
-            <Link to={"/menu"} className="btn btn-danger">
-              <MdArrowBack />
+            <Link to={"/menudiary"} className="btn btn-danger btn-icon">
+              <MdArrowBack className="icon" />
               Kembali
             </Link>
           </div>

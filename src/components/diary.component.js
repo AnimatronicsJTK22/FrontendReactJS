@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DiaryDataService from "../services/diary.service";
-import { withRouter } from '../common/with-router';
+import { withRouter } from "../common/with-router";
 
 class Diary extends Component {
   constructor(props) {
@@ -17,9 +17,9 @@ class Diary extends Component {
         id: null,
         title: "",
         content: "",
-        visibility: false
+        visibility: false,
       },
-      message: ""
+      message: "",
     };
   }
 
@@ -30,36 +30,36 @@ class Diary extends Component {
   onChangeTitle(e) {
     const title = e.target.value;
 
-    this.setState(function(prevState) {
+    this.setState(function (prevState) {
       return {
         currentDiary: {
           ...prevState.currentDiary,
-          title: title
-        }
+          title: title,
+        },
       };
     });
   }
 
   onChangeContent(e) {
     const content = e.target.value;
-    
-    this.setState(prevState => ({
+
+    this.setState((prevState) => ({
       currentDiary: {
         ...prevState.currentDiary,
-        content: content
-      }
+        content: content,
+      },
     }));
   }
 
   getDiary(id) {
     DiaryDataService.get(id)
-      .then(response => {
+      .then((response) => {
         this.setState({
-          currentDiary: response.data
+          currentDiary: response.data,
         });
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -69,36 +69,33 @@ class Diary extends Component {
       id: this.state.currentDiary.id,
       title: this.state.currentDiary.title,
       content: this.state.currentDiary.content,
-      visibility: status
+      visibility: status,
     };
 
     DiaryDataService.update(this.state.currentDiary.id, data)
-      .then(response => {
-        this.setState(prevState => ({
+      .then((response) => {
+        this.setState((prevState) => ({
           currentDiary: {
             ...prevState.currentDiary,
-            visibility: status
-          }
+            visibility: status,
+          },
         }));
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   updateDiary() {
-    DiaryDataService.update(
-      this.state.currentDiary.id,
-      this.state.currentDiary
-    )
-      .then(response => {
+    DiaryDataService.update(this.state.currentDiary.id, this.state.currentDiary)
+      .then((response) => {
         console.log(response.data);
         this.setState({
-          message: "The diary was updated successfully!"
+          message: "The diary was updated successfully!",
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -106,11 +103,11 @@ class Diary extends Component {
   deleteDiary() {
     if (window.confirm("Are you sure to delete this diary?")) {
       DiaryDataService.delete(this.state.currentDiary.id)
-        .then(response => {
+        .then((response) => {
           console.log(response.data);
-          this.props.router.navigate('/diary');
+          this.props.router.navigate("/diary");
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     }
@@ -137,13 +134,15 @@ class Diary extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="content">Content</label>
-                <input
-                  type="text"
+                <textarea
                   className="form-control"
                   id="content"
                   value={currentDiary.content}
                   onChange={this.onChangeContent}
-                />
+                  name="content"
+                  rows="5"
+                  cols="50"
+                ></textarea>
               </div>
 
               <div className="form-group">

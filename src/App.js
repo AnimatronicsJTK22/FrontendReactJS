@@ -9,11 +9,10 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
+import MenuDiary from "./components/MenuDiary";
+import MenuMoney from "./components/MenuMoney";
 import BoardModerator from "./components/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin";
-// import TutorialsList from "./components/tutorials-list.component"
-// import AddTutorial from "./components/add-tutorial.component"
 import Tutorial from "./components/tutorial.component"
 
 import { logout } from "./slices/auth";
@@ -22,8 +21,6 @@ import EventBus from "./common/EventBus";
 import DiaryListComponent from "./components/diary-list.component";
 import AddDiaryComponent from "./components/add-diary.component";
 import Diary from "./components/diary.component";
-import UserTable from "./slices/userTable";
-// import DiariesList from "./components/DiariesList";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -57,11 +54,11 @@ const App = () => {
   return (
     <Router>
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            Diamond App
+        <nav className="navbar navbar-expand navbar-dark navbar-custom">
+          <Link to={"/"} className="navbar-brand" style={{ fontFamily: 'Gentona', fontSize: '32px', fontWeight: 'bold' }}>
+            Diamond
           </Link>
-          <div className="navbar-nav mr-auto">
+          <div className="navbar-nav mr-auto" style={{fontWeight:'bold'}}>
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
@@ -86,31 +83,23 @@ const App = () => {
 
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/menu"} className="nav-link">
+                <Link to={"/menudiary"} className="nav-link">
                   Diary
                 </Link>
               </li>
             )}
 
-            {/* {currentUser && (
+            {currentUser && (
               <li className="nav-item">
-                <Link to={"/diary"} className="nav-link">
-                  Diary
+                <Link to={"/menumoney"} className="nav-link">
+                  Money
                 </Link>
               </li>
-            )} */}
-
-            {/* {currentUser && (
-              <li className="nav-item">
-                <Link to={"/add"} className="nav-link">
-                  Add Diary
-                </Link>
-              </li>
-            )} */}
+            )}
           </div>
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
+            <div className="navbar-nav ml-auto" style={{fontWeight:'bold'}}>
               <li className="nav-item">
                 <Link to={"/profile"} className="nav-link">
                 {currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)}
@@ -146,7 +135,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/menu" element={<BoardUser />} />
+            <Route path="/menudiary" element={<MenuDiary />} />
+            <Route path="/menumoney" element={<MenuMoney />} />
             {/* <Route path="/user" element={<UserTable />} /> */}
             {/* <Route path="/diarylist" element={<DiariesList />} /> */}
             <Route path="/mod" element={<BoardModerator />} />
