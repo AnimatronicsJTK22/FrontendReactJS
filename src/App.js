@@ -91,7 +91,7 @@ const App = () => {
 
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/menumoney"} className="nav-link">
+                <Link to={`/menumoney/${currentUser?.id ?? ''}`} className="nav-link">
                   Money
                 </Link>
               </li>
@@ -136,7 +136,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/menudiary" element={<MenuDiary />} />
-            <Route path="/menumoney" element={<MenuMoney />} />
+            <Route path="/menumoney/:id" element={<MenuMoney />} />
             {/* <Route path="/user" element={<UserTable />} /> */}
             {/* <Route path="/diarylist" element={<DiariesList />} /> */}
             <Route path="/mod" element={<BoardModerator />} />
