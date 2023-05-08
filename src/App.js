@@ -112,7 +112,7 @@ const App = () => {
               </li>
             </div>
           ) : (
-            <div className="navbar-nav ml-auto">
+            <div className="navbar-nav ml-auto" style={{fontWeight:'bold'}}>
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
                   Login
