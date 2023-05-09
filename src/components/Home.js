@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 
 const Home = () => {
-  const [content, setContent] = useState("");
+  const [setContent] = useState("");
 
   useEffect(() => {
     UserService.getPublicContent().then(
@@ -19,7 +19,7 @@ const Home = () => {
         setContent(_content);
       }
     );
-  }, []);
+  }, [setContent]);
 
   return (
     <div className="container">

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { FaTrashAlt } from 'react-icons/fa';
-import { BsArrowLeft, BsTextCenter } from 'react-icons/bs';
+import { BsArrowLeft } from 'react-icons/bs';
 import DiaryDataService from "../services/diary.service";
 import { Link } from "react-router-dom";
 
@@ -125,15 +124,8 @@ export default class DiariesList extends Component {
               Diary kosong..
             </div>
           )}
-  
-          <button
-            className="m-3 btn btn-sm btn-warning btn-icon"
-            onClick={this.removeAllDiary}
-          >
-            <FaTrashAlt className="icon" />
-            Remove All
-          </button>
-          <Link to={"/menudiary"} className="btn btn-sm btn-danger btn-icon">
+
+          <Link to={"/menudiary"} className="m-3 btn btn-sm btn-danger btn-icon">
           <BsArrowLeft className="icon" />
             Kembali
           </Link>
@@ -191,7 +183,6 @@ export default class DiariesList extends Component {
               <p>Please click on a Diary...</p>
             </div>
           )}
-          <p>*Remove all hanya dapat dilakukan oleh admin</p>
         </div>
       </div>
     );

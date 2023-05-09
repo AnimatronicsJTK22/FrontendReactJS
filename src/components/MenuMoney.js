@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import MoneyDataService from "../services/money.service";
 import { withRouter } from "../common/with-router";
+import { MdCheck } from "react-icons/md";
 
 class Money extends Component {
   constructor(props) {
@@ -17,8 +18,8 @@ class Money extends Component {
         balance: "",
         lastChangeDesc: ""
       },
-      deposit: "",
-      withdraw: "",
+      deposit: 0,
+      withdraw: 0,
       message: "",
     };
     
@@ -81,6 +82,16 @@ class Money extends Component {
       parseInt(this.state.currentMoney.balance) +
       parseInt(this.state.deposit) -
       parseInt(this.state.withdraw);
+    
+    // Validation check
+    if (parseInt(this.state.withdraw) > parseInt(this.state.currentMoney.balance)) {
+      this.setState({
+        message: "Withdrawal amount cannot be greater than the current balance",
+        withdraw: 0,
+      });
+      return;
+    }
+  
     const newMoney = {
       id: this.state.currentMoney.id,
       balance: newBalance,
@@ -93,8 +104,8 @@ class Money extends Component {
         this.setState({
           currentMoney: newMoney,
           message: "The money management was updated successfully!",
-          deposit: "",
-          withdraw: "",
+          deposit: 0,
+          withdraw: 0,
         });
       })
       .catch((e) => {
@@ -182,19 +193,8 @@ class Money extends Component {
               </div>
             </form>
 
-            <button
-              className="badge badge-danger mr-2"
-              onClick={this.deleteMoney}
-            >
-              Delete
-            </button>
-
-            <button
-              type="submit"
-              className="badge badge-success"
-              onClick={this.updateMoney}
-            >
-              Update
+            <button onClick={this.updateMoney} className="btn btn-success mr-2 btn-icon">
+              <MdCheck className="icon"/> Update
             </button>
             <p>{this.state.message}</p>
           </div>
