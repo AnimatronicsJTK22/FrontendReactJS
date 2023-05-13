@@ -16,7 +16,7 @@ class Money extends Component {
       currentMoney: {
         id: null,
         balance: "",
-        lastChangeDesc: ""
+        lastChangeDesc: []
       },
       deposit: 0,
       withdraw: 0,
@@ -43,15 +43,14 @@ class Money extends Component {
   }
 
   onChangeLastChangeDesc(e) {
-    const lastChangeDesc = e.target.value;
-  
+    const lastChangeDesc = e.target.value.split("\n");
     this.setState((prevState) => ({
       currentMoney: {
         ...prevState.currentMoney,
         lastChangeDesc: lastChangeDesc,
       },
     }));
-  }
+  }  
   
   onChangeDeposit(e) {
     const deposit = e.target.value;
@@ -75,7 +74,7 @@ class Money extends Component {
       .catch((e) => {
         console.log(e);
       });
-  }
+  }  
 
   updateMoney() {
     const newBalance =
