@@ -44,3 +44,22 @@ label {
 .btn-icon .icon {
   margin-right: 0.5rem;
 }
+
+.table {
+  font-size: 14px;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.table th {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
