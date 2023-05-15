@@ -5,13 +5,13 @@ import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
 const BoardUser = () => {
-  const [setContent] = useState("");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     UserService.getUserBoard().then(
       (response) => {
         setContent(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       },
       (error) => {
         const _content =
@@ -28,7 +28,7 @@ const BoardUser = () => {
         }
       }
     );
-  }, [setContent]);
+  }, []);
 
   return (
     <div className="container text-center" style={{display:'flex', justifyContent: "center"}}>

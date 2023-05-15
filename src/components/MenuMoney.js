@@ -16,10 +16,12 @@ class Money extends Component {
       currentMoney: {
         id: null,
         balance: "",
-        lastChangeDesc: []
+        lastChangeDesc: [],
+        time: []
       },
       deposit: 0,
       withdraw: 0,
+      historyDesc: "",
       message: "",
     };
     
@@ -61,6 +63,11 @@ class Money extends Component {
     const withdraw = e.target.value;
     this.setState({ withdraw });
   }
+
+  onChangeHistoryDesc(e){
+    const historyDesc = e.target.value;
+    this.setState({ historyDesc })
+  }
   
 
   getMoney(id) {
@@ -94,22 +101,32 @@ class Money extends Component {
     const newMoney = {
       id: this.state.currentMoney.id,
       balance: newBalance,
-      lastChangeDesc: this.state.currentMoney.lastChangeDesc,
+      historyDesc: this.state.historyDesc
     };
   
     MoneyDataService.update(newMoney.id, newMoney)
-      .then((response) => {
-        console.log(response.data);
-        this.setState({
-          currentMoney: newMoney,
-          message: "The money management was updated successfully!",
-          deposit: 0,
-          withdraw: 0,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    .then((response) => {
+      console.log(response.data);
+      const updatedMoney = response.data;
+      const updatedHistoryDesc = updatedMoney.lastChangeDesc;
+      const updatedTime = updatedMoney.time;
+      // Only update the necessary properties in the currentMoney object
+      this.setState((prevState) => ({
+        currentMoney: {
+          ...prevState.currentMoney,
+          balance: newMoney.balance,
+          lastChangeDesc: updatedHistoryDesc,
+          time: updatedTime,
+        },
+        message: "The money management was updated successfully!",
+        deposit: 0,
+        withdraw: 0,
+        historyDesc: "",
+      }));
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   }
   
 
@@ -128,7 +145,6 @@ class Money extends Component {
 
   render() {
     const { currentMoney } = this.state;
-    // console.log(currentMoney);
 
     const formatCurrency = (value) => {
       const formatter = new Intl.NumberFormat("id-ID", {
@@ -178,17 +194,47 @@ class Money extends Component {
                   onChange={this.onChangeWithdraw.bind(this)}
                 />
               </div>
+
               <div className="form-group">
-                <label htmlFor="lastChangeDesc">History</label>
-                <textarea
+                <label htmlFor="historyDesc">Message</label>
+                <input
+                  type="text"
                   className="form-control"
-                  id="lastChangeDesc"
-                  value={currentMoney.lastChangeDesc}
-                  onChange={this.onChangeLastChangeDesc}
-                  name="lastChangeDesc"
-                  rows="5"
-                  cols="50"
-                ></textarea>
+                  id="historyDesc"
+                  value={this.state.historyDesc}
+                  onChange={this.onChangeHistoryDesc.bind(this)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="time">History</label>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Description</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentMoney.lastChangeDesc.map((desc, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{desc}</td>
+                        <td>
+                          {new Date(currentMoney.time[index]).toLocaleString("en-GB", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </form>
 

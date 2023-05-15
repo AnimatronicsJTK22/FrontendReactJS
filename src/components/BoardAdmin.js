@@ -191,7 +191,6 @@ export default class DiariesList extends Component {
               <p>Please click on a Diary...</p>
             </div>
           )}
-          <p>*Remove all hanya dapat dilakukan oleh admin</p>
         </div>
       </div>
     );

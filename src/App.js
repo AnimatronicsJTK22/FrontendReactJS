@@ -11,9 +11,8 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import MenuDiary from "./components/MenuDiary";
 import MenuMoney from "./components/MenuMoney";
-import BoardModerator from "./components/BoardModerator";
+import UserList from "./components/userList";
 import BoardAdmin from "./components/BoardAdmin";
-import Tutorial from "./components/tutorial.component"
 
 import { logout } from "./slices/auth";
 
@@ -65,10 +64,10 @@ const App = () => {
               </Link>
             </li>
 
-            {showModeratorBoard && (
+            {showAdminBoard && (
               <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
+                <Link to={"/userList"} className="nav-link">
+                  Users
                 </Link>
               </li>
             )}
@@ -76,7 +75,7 @@ const App = () => {
             {showAdminBoard && (
               <li className="nav-item">
                 <Link to={"/admin"} className="nav-link">
-                  Admin Board
+                  Diaries
                 </Link>
               </li>
             )}
@@ -137,14 +136,11 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/menudiary" element={<MenuDiary />} />
             <Route path="/menumoney/:id" element={<MenuMoney />} />
-            {/* <Route path="/user" element={<UserTable />} /> */}
-            {/* <Route path="/diarylist" element={<DiariesList />} /> */}
-            <Route path="/mod" element={<BoardModerator />} />
+            <Route path="/userList" element={<UserList />} />
             <Route path="/admin" element={<BoardAdmin />} />
             <Route path="/diary" element={<DiaryListComponent/>} />
             <Route path="/diary/:id" element={<Diary/>} />
             <Route path="/add" element={<AddDiaryComponent/>} />
-            <Route path="/tutorials/:id" element={<Tutorial/>} />
           </Routes>
         </div>
       </div>
