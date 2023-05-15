@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import MoneyDataService from "../services/money.service";
 import { withRouter } from "../common/with-router";
+import { MdCheck } from "react-icons/md";
 
 class Money extends Component {
   constructor(props) {
@@ -128,7 +129,7 @@ class Money extends Component {
   render() {
     const { currentMoney } = this.state;
     // console.log(currentMoney);
-  
+
     const formatCurrency = (value) => {
       const formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -138,7 +139,7 @@ class Money extends Component {
   
       return formatter.format(value);
     };
-  
+
     return (
       <div>
         {currentMoney ? (
@@ -153,19 +154,9 @@ class Money extends Component {
                   id="balance"
                   value={formatCurrency(currentMoney.balance)}
                   onChange={this.onChangeBalance}
+                  disabled
                 />
               </div>
-  
-              <div className="form-group">
-                <label htmlFor="lastChangeDesc">Change Description</label>
-                <textarea
-                  className="form-control"
-                  id="lastChangeDesc"
-                  value="Write here.."
-                  onChange={this.onChangeLastChangeDesc}
-                />
-              </div>
-  
               <div className="form-group">
                 <label htmlFor="deposit">Deposit</label>
                 <input
@@ -173,10 +164,10 @@ class Money extends Component {
                   className="form-control"
                   id="deposit"
                   value={this.state.deposit}
-                  onChange={this.onChangeDeposit}
+                  onChange={this.onChangeDeposit.bind(this)}
                 />
               </div>
-  
+
               <div className="form-group">
                 <label htmlFor="withdraw">Withdraw</label>
                 <input
@@ -184,68 +175,37 @@ class Money extends Component {
                   className="form-control"
                   id="withdraw"
                   value={this.state.withdraw}
-                  onChange={this.onChangeWithdraw}
+                  onChange={this.onChangeWithdraw.bind(this)}
                 />
               </div>
-  
-              <button
-                className="badge badge-primary mr-2"
-                onClick={this.updateMoney}
-              >
-                Update
-              </button>
-  
-              <button
-                className="badge badge-danger mr-2"
-                onClick={this.deleteMoney}
-              >
-                Delete
-              </button>
-
               <div className="form-group">
-                <label htmlFor="time">History</label>
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>No.</th>
-                      <th>Description</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentMoney.lastChangeDesc.map((desc, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{desc}</td>
-                        <td>
-                          {new Date(currentMoney.time[index]).toLocaleString("en-GB", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit",
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <label htmlFor="lastChangeDesc">History</label>
+                <textarea
+                  className="form-control"
+                  id="lastChangeDesc"
+                  value={currentMoney.lastChangeDesc}
+                  onChange={this.onChangeLastChangeDesc}
+                  name="lastChangeDesc"
+                  rows="5"
+                  cols="50"
+                ></textarea>
               </div>
-
-  
-              <p>{this.state.message}</p>
             </form>
+
+            <button onClick={this.updateMoney} className="btn btn-success mr-2 btn-icon">
+              <MdCheck className="icon"/> Update
+            </button>
+            <p>{this.state.message}</p>
           </div>
         ) : (
           <div>
             <br />
-            <p>Please click on a Money Discipline...</p>
+            <p>Please click on a Money List...</p>
           </div>
         )}
       </div>
     );
   }
-}  
+}
 
 export default withRouter(Money);
