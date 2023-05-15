@@ -3,6 +3,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { BsArrowLeft } from 'react-icons/bs';
 import DiaryDataService from "../services/diary.service";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert";
 
 export default class DiariesList extends Component {
   constructor(props) {
@@ -63,20 +64,24 @@ export default class DiariesList extends Component {
   }
 
   removeAllDiary() {
-    if (
-      window.confirm(
-        "Are you sure you want to delete all diaries? (admin only)"
-      )
-    ) {
-      DiaryDataService.deleteAll()
-        .then((response) => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
+    Swal({
+      title: "Are you sure?",
+      text: "This action will delete all diaries. This operation cannot be undone.",
+      icon: "warning",
+      buttons: ["Cancel", "Delete"],
+      dangerMode: true,
+    }).then((confirmDelete) => {
+      if (confirmDelete) {
+        DiaryDataService.deleteAll()
+          .then((response) => {
+            console.log(response.data);
+            this.refreshList();
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    });
   }
 
   searchTitle() {

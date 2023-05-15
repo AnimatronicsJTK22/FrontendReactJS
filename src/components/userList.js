@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import authService from "../services/auth.service";
 import { ListGroup, Button, Row, Col } from "react-bootstrap";
+import Swal from "react-bootstrap-sweetalert";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     getAllUsers();
@@ -19,14 +21,24 @@ const UserList = () => {
       });
   };
 
-  const deleteUser = (id) => {
-    authService.deleteUserById(id)
+  const deleteUser = (id, username) => {
+    if (username === "admin") {
+      setShowPopup(true);
+      return;
+    }
+
+    authService
+      .deleteUserById(id)
       .then(() => {
         getAllUsers();
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -41,7 +53,7 @@ const UserList = () => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => deleteUser(user.id)}
+                  onClick={() => deleteUser(user.id, user.username)}
                 >
                   Delete
                 </Button>
@@ -50,6 +62,14 @@ const UserList = () => {
           </ListGroup.Item>
         ))}
       </ListGroup>
+
+      <Swal
+        show={showPopup}
+        title="Access Denied"
+        text="You cannot delete the admin user."
+        type="error"
+        onConfirm={closePopup}
+      />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createDiary } from "../slices/diary";
 import { Link } from "react-router-dom";
 import { MdCheck, MdArrowBack } from "react-icons/md";
+import Swal from "sweetalert";
 
 class AddDiary extends Component {
   constructor(props) {
@@ -47,6 +48,14 @@ class AddDiary extends Component {
           visibility: data.visibility,
           submitted: true,
         });
+        Swal({
+          title: "Success",
+          text: "You submitted successfully!",
+          icon: "success",
+          button: "OK",
+        }).then(() => {
+          this.newDiary();
+        });
         console.log(data);
       })
       .catch((e) => {
@@ -69,13 +78,7 @@ class AddDiary extends Component {
       <div className="submit-form">
         {this.state.submitted ? (
           <div>
-            <h4>You submitted successfully!</h4>
-            {/* <button className="btn btn-success" onClick={this.newDiary}>
-              Add
-            </button> */}
-            <Link to={"/diary"} className="btn btn-success" onClick={this.newDiary}>
-              Add
-            </Link>
+            
           </div>
         ) : (
           <div>

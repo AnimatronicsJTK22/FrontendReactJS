@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert"
+import { useNavigate } from "react-router-dom";
 
 import { register } from "../slices/auth";
 import { clearMessage } from "../slices/message";
 
 const Register = () => {
   const [successful, setSuccessful] = useState(false);
+  const navigate = useNavigate();
 
   const { message } = useSelector((state) => state.message);
   const dispatch = useDispatch();
@@ -50,18 +53,33 @@ const Register = () => {
 
   const handleRegister = (formValue) => {
     const { username, email, password } = formValue;
-
+  
     setSuccessful(false);
-
+  
     dispatch(register({ username, email, password }))
       .unwrap()
       .then(() => {
         setSuccessful(true);
+        Swal({
+          title: "Success",
+          text: "Registration successful!",
+          icon: "success",
+          button: "OK",
+        }).then(() => {
+          navigate("/login"); // Redirect to the login page
+        });
       })
       .catch(() => {
         setSuccessful(false);
+        Swal({
+          title: "Error",
+          text: "Registration failed.",
+          icon: "error",
+          button: "OK",
+        });
       });
   };
+  
 
   return (
     <div className="col-md-12 signup-form">
