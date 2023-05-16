@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import MoneyDataService from "../services/money.service";
 import { withRouter } from "../common/with-router";
 import { MdCheck } from "react-icons/md";
+import Swal from "sweetalert2"
 
 class Money extends Component {
   constructor(props) {
@@ -89,6 +90,16 @@ class Money extends Component {
   }  
 
   updateMoney() {
+    // Check if historyDesc is empty or ""
+    if (!this.state.historyDesc) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Message is required',
+      });
+      return;
+    }
+
     const formatCurrency = (value) => {
       const formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
