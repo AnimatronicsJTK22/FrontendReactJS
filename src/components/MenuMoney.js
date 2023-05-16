@@ -17,14 +17,15 @@ class Money extends Component {
         id: null,
         balance: "",
         lastChangeDesc: [],
+        balanceDesc: [],
         time: []
       },
       deposit: 0,
       withdraw: 0,
       historyDesc: "",
+      balanceChange: "",
       message: "",
     };
-    
   }
 
   componentDidMount() {
@@ -68,8 +69,12 @@ class Money extends Component {
     const historyDesc = e.target.value;
     this.setState({ historyDesc })
   }
-  
 
+  onChangeBalanceChange(e){
+    const balanceChange = e.target.value;
+    this.setState({ balanceChange });
+  }
+  
   getMoney(id) {
     MoneyDataService.get(id)
       .then((response) => {
@@ -84,6 +89,16 @@ class Money extends Component {
   }  
 
   updateMoney() {
+    const formatCurrency = (value) => {
+      const formatter = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      });
+  
+      return formatter.format(value);
+    };
+    
     const newBalance =
       parseInt(this.state.currentMoney.balance) +
       parseInt(this.state.deposit) -
@@ -97,11 +112,19 @@ class Money extends Component {
       });
       return;
     }
+
+    let balanceChange = "";
+    if (this.state.deposit !== 0) {
+      balanceChange = "+" + formatCurrency(this.state.deposit);
+    } else if (this.state.withdraw !== 0) {
+      balanceChange = "-" + formatCurrency(this.state.withdraw);
+    }
   
     const newMoney = {
       id: this.state.currentMoney.id,
       balance: newBalance,
-      historyDesc: this.state.historyDesc
+      historyDesc: this.state.historyDesc,
+      balanceChange: balanceChange
     };
   
     MoneyDataService.update(newMoney.id, newMoney)
@@ -109,6 +132,7 @@ class Money extends Component {
       console.log(response.data);
       const updatedMoney = response.data;
       const updatedHistoryDesc = updatedMoney.lastChangeDesc;
+      const updatedBalanceChange = updatedMoney.balanceDesc;
       const updatedTime = updatedMoney.time;
       // Only update the necessary properties in the currentMoney object
       this.setState((prevState) => ({
@@ -116,12 +140,14 @@ class Money extends Component {
           ...prevState.currentMoney,
           balance: newMoney.balance,
           lastChangeDesc: updatedHistoryDesc,
+          balanceDesc: updatedBalanceChange,
           time: updatedTime,
         },
         message: "The money management was updated successfully!",
         deposit: 0,
         withdraw: 0,
         historyDesc: "",
+        balanceChange: "",
       }));
     })
     .catch((e) => {
@@ -173,27 +199,87 @@ class Money extends Component {
                   disabled
                 />
               </div>
+              {this.state.deposit === 0 && this.state.withdraw === 0 && (
+              <div className="form-group">
+                <label>Action</label>
+                <div className="btn-group">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => this.setState({ deposit: 1, withdraw: 0 })}
+                  >
+                    Deposit
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => this.setState({ deposit: 0, withdraw: 1 })}
+                  >
+                    Withdraw
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {this.state.deposit !== 0 && (
               <div className="form-group">
                 <label htmlFor="deposit">Deposit</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="deposit"
-                  value={this.state.deposit}
-                  onChange={this.onChangeDeposit.bind(this)}
-                />
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="deposit"
+                    value={this.state.deposit}
+                    onChange={this.onChangeDeposit.bind(this)}
+                  />
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-outline-secondary"
+                      type="button"
+                      onClick={() => this.setState({ deposit: 0 })}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => this.setState({ deposit: 0 })}
+                  style={{ marginTop: "10px" }}
+                >
+                  Back
+                </button>
               </div>
+            )}
 
+            {this.state.withdraw !== 0 && (
               <div className="form-group">
                 <label htmlFor="withdraw">Withdraw</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="withdraw"
-                  value={this.state.withdraw}
-                  onChange={this.onChangeWithdraw.bind(this)}
-                />
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="withdraw"
+                    value={this.state.withdraw}
+                    onChange={this.onChangeWithdraw.bind(this)}
+                  />
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-outline-secondary"
+                      type="button"
+                      onClick={() => this.setState({ withdraw: 0 })}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => this.setState({ withdraw: 0 })}
+                  style={{ marginTop: "10px" }}
+                >
+                  Back
+                </button>
               </div>
+            )}
 
               <div className="form-group">
                 <label htmlFor="historyDesc">Message</label>
@@ -213,6 +299,7 @@ class Money extends Component {
                     <tr>
                       <th>No.</th>
                       <th>Description</th>
+                      <th>Change</th>
                       <th>Time</th>
                     </tr>
                   </thead>
@@ -221,6 +308,7 @@ class Money extends Component {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{desc}</td>
+                        <td>{currentMoney.balanceDesc[index]}</td>
                         <td>
                           {new Date(currentMoney.time[index]).toLocaleString("en-GB", {
                             day: "2-digit",
