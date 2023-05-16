@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert"
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion"
 
 import { register } from "../slices/auth";
 import { clearMessage } from "../slices/message";
@@ -82,7 +83,7 @@ const Register = () => {
   
 
   return (
-    <div className="col-md-12 signup-form">
+    <motion.div className="col-md-12 signup-form" animate={{ scale: 1 }} initial={{ scale: 0 }}>
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -150,7 +151,7 @@ const Register = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

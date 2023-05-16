@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import authService from "../services/auth.service";
 import { ListGroup, Button, Row, Col } from "react-bootstrap";
-import Swal from "react-bootstrap-sweetalert";
+import Swal from "sweetalert";
+// import 'sweetalert/dist/sweetalert.css';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -22,20 +23,31 @@ const UserList = () => {
   };
 
   const deleteUser = (id, username) => {
-    if (username === "admin") {
-      setShowPopup(true);
-      return;
-    }
-
-    authService
-      .deleteUserById(id)
-      .then(() => {
-        getAllUsers();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    Swal({
+      title: "Confirmation",
+      text: "Are you sure you want to delete this user?",
+      icon: "warning",
+      buttons: ["Cancel", "Delete"],
+      dangerMode: true,
+    }).then((confirmed) => {
+      if (confirmed) {
+        authService
+          .deleteUserById(id)
+          .then((response) => {
+            if (response.status == 403) {
+              setShowPopup(true);
+            } else {
+              getAllUsers();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
   };
+  
+  
 
   const closePopup = () => {
     setShowPopup(false);
@@ -63,16 +75,17 @@ const UserList = () => {
         ))}
       </ListGroup>
 
-      <Swal
-        show={showPopup}
-        title="Access Denied"
-        text="You cannot delete the admin user."
-        type="error"
-        onConfirm={closePopup}
-      />
+      {showPopup && (
+        <Swal
+          show={showPopup}
+          title="Access Denied"
+          text="You cannot delete the admin user."
+          icon="error"
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };
-
 
 export default UserList;

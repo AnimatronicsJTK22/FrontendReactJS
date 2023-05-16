@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { motion } from "framer-motion"
 
 import { login } from "../slices/auth";
 import { clearMessage } from "../slices/message";
@@ -51,7 +52,7 @@ const Login = () => {
   }
 
   return (
-    <div className="col-md-12 login-form">
+    <motion.div className="col-md-12 login-form" animate={{ scale: 1 }} initial={{ scale: 0 }}>
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -103,7 +104,7 @@ const Login = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

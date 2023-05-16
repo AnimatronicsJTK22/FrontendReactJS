@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {motion} from "framer-motion"
 
 import UserService from "../services/user.service";
 
@@ -24,12 +25,21 @@ const Home = () => {
   return (
     <div className="container">
       <header className="jumbotron">
-        <div className="text-center">
-          <img src={process.env.PUBLIC_URL + '/diamond-png-image-pngfre-24.png'} width={'500'} height={'400'} alt="Diamond Logo" />
-          <h3 style={{ fontFamily: "Galimer", fontWeight:'bold'}}>
-            Diary and Money Discipline
-          </h3>
-        </div>
+        <motion.div 
+        animate={{ scale: 1 }}
+        initial= {{ scale: 0 }}
+        className="text-center">
+          <img 
+          src={process.env.PUBLIC_URL + '/diamond-png-image-pngfre-24.png'} 
+          width={'500'} 
+          height={'400'} 
+          alt="Diamond Logo" />
+        </motion.div>
+
+        <h3 style={{ fontFamily: "Galimer", fontWeight:'bold'}} className="text-center">
+          Diary and Money Discipline
+        </h3>
+
         <hr></hr>
         <p></p>
         <div className="text-center" style={{fontFamily:"Galimer"}}>
