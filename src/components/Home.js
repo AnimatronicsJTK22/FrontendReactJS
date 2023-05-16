@@ -24,7 +24,7 @@ const Home = () => {
 
   const memberData = [
     {
-      name: "Muhammad Azharuddin Hamid",
+      name: "Muhammad Azharuddin",
       photo: process.env.PUBLIC_URL + "/azhar.jpg",
     },
     {

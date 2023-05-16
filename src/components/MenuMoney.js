@@ -212,7 +212,7 @@ class Money extends Component {
               </div>
               {this.state.deposit === 0 && this.state.withdraw === 0 && (
               <div className="form-group">
-                <label>Action</label>
+                {/* <label>Action</label> */}
                 <div className="btn-group">
                   <button
                     className="btn btn-primary"
@@ -338,7 +338,8 @@ class Money extends Component {
             </form>
 
             <button onClick={this.updateMoney} className="btn btn-success mr-2 btn-icon">
-              <MdCheck className="icon"/> Update
+              <MdCheck className="icon"/> 
+              Update
             </button>
             <p>{this.state.message}</p>
           </div>
