@@ -60,7 +60,7 @@ const UserList = () => {
         {users.map((user) => (
           <ListGroup.Item key={user.id}>
             <Row>
-              <Col>{user.username}</Col>
+              <Col>{user.username.charAt(0).toUpperCase() + user.username.slice(1)}</Col>
               <Col xs="auto">
                 <Button
                   variant="danger"

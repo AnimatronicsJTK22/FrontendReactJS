@@ -56,7 +56,7 @@ const BoardUser = () => {
           </Link>
           <Link
             to={"/diary"}
-            className="badge badge-primary"
+            className="badge badge-primary navbar-custom"
             style={{
               fontSize: "24px",
               padding: "24px 36px",

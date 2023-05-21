@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import MoneyDataService from "../services/money.service";
 import { withRouter } from "../common/with-router";
-import { MdCheck } from "react-icons/md";
 import Swal from "sweetalert2"
 
 class Money extends Component {
@@ -75,7 +74,7 @@ class Money extends Component {
     const balanceChange = e.target.value;
     this.setState({ balanceChange });
   }
-  
+
   getMoney(id) {
     MoneyDataService.get(id)
       .then((response) => {
@@ -193,116 +192,78 @@ class Money extends Component {
       return formatter.format(value);
     };
 
+    const handleDeposit = () => {
+      Swal.fire({
+        title: "Deposit",
+        html:
+          '<input type="number" id="depositAmount" min="0" step="1000" class="swal2-input" placeholder="Enter deposit amount">' +
+          '<input type="text" id="message" class="swal2-input" placeholder="Enter message">',
+        showCancelButton: true,
+        confirmButtonText: "Deposit",
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          const depositAmount = parseInt(document.getElementById("depositAmount").value);
+          const message = document.getElementById("message").value;
+          // Set the deposit amount and message in the state
+          this.setState({ deposit: depositAmount, historyDesc: message }, () => {
+            this.updateMoney();
+          });
+          // Return a Promise that resolves when the deposit is successful
+          // return new Promise.resolve();
+          return
+        },
+        // allowOutsideClick: () => !Swal.isLoading(),
+      });
+    };
+    
+    const handleWithdraw = () => {
+      Swal.fire({
+        title: "Withdraw",
+        html:
+          '<input type="number" id="withdrawAmount" min="0" max="' +
+          currentMoney.balance +
+          '" step="1000" class="swal2-input" placeholder="Enter withdraw amount" style="width: 260px; height: 50px;">' +
+          '<input type="text" id="message" class="swal2-input" placeholder="Enter message">',
+        showCancelButton: true,
+        confirmButtonText: "Withdraw",
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          const withdrawAmount = parseInt(document.getElementById("withdrawAmount").value);
+          const message = document.getElementById("message").value;
+          // Set the withdraw amount and message in the state
+          this.setState({ withdraw: withdrawAmount, historyDesc: message }, () => {
+            this.updateMoney();
+          });
+          // Return a Promise that resolves when the withdraw is successful
+          // return new Promise.resolve();
+          return
+        },
+        // allowOutsideClick: () => !Swal.isLoading(),
+      });
+    };
+    
+
     return (
       <div>
         {currentMoney ? (
           <div className="edit-form">
-            <h4>Money Discipline</h4>
+            <h4 className="text-center" style={{fontWeight:"bold"}}>
+              Your Money
+            </h4>
+            <h4 className="text-center" style={{fontSize:"36px"}}>
+              <u>{formatCurrency(currentMoney.balance)}</u>
+            </h4>
+
+            <div className="text-center mt-4">
+              <button onClick={handleDeposit} className="btn btn-primary mr-2">
+                Deposit
+              </button>
+              <button onClick={handleWithdraw} className="btn btn-danger">
+                Withdraw
+              </button>
+            </div>
+
             <form>
-              <div className="form-group">
-                <label htmlFor="balance">Balance</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="balance"
-                  value={formatCurrency(currentMoney.balance)}
-                  onChange={this.onChangeBalance}
-                  disabled
-                />
-              </div>
-              {this.state.deposit === 0 && this.state.withdraw === 0 && (
-              <div className="form-group">
-                {/* <label>Action</label> */}
-                <div className="btn-group">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => this.setState({ deposit: 1, withdraw: 0 })}
-                  >
-                    Deposit
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => this.setState({ deposit: 0, withdraw: 1 })}
-                  >
-                    Withdraw
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {this.state.deposit !== 0 && (
-              <div className="form-group">
-                <label htmlFor="deposit">Deposit</label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="deposit"
-                    value={this.state.deposit}
-                    onChange={this.onChangeDeposit.bind(this)}
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn btn-outline-secondary"
-                      type="button"
-                      onClick={() => this.setState({ deposit: 0 })}
-                    >
-                      Clear
-                    </button>
-                  </div>
-                </div>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => this.setState({ deposit: 0 })}
-                  style={{ marginTop: "10px" }}
-                >
-                  Back
-                </button>
-              </div>
-            )}
-
-            {this.state.withdraw !== 0 && (
-              <div className="form-group">
-                <label htmlFor="withdraw">Withdraw</label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="withdraw"
-                    value={this.state.withdraw}
-                    onChange={this.onChangeWithdraw.bind(this)}
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn btn-outline-secondary"
-                      type="button"
-                      onClick={() => this.setState({ withdraw: 0 })}
-                    >
-                      Clear
-                    </button>
-                  </div>
-                </div>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => this.setState({ withdraw: 0 })}
-                  style={{ marginTop: "10px" }}
-                >
-                  Back
-                </button>
-              </div>
-            )}
-
-              <div className="form-group">
-                <label htmlFor="historyDesc">Message</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="historyDesc"
-                  value={this.state.historyDesc}
-                  onChange={this.onChangeHistoryDesc.bind(this)}
-                />
-              </div>
-
               <div className="form-group">
                 <label htmlFor="time">History</label>
                 <table className="table">
@@ -336,11 +297,6 @@ class Money extends Component {
                 </table>
               </div>
             </form>
-
-            <button onClick={this.updateMoney} className="btn btn-success mr-2 btn-icon">
-              <MdCheck className="icon"/> 
-              Update
-            </button>
             <p>{this.state.message}</p>
           </div>
         ) : (

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
 
 import Login from "./components/Login";
@@ -22,7 +23,7 @@ import AddDiaryComponent from "./components/add-diary.component";
 import Diary from "./components/diary.component";
 
 const App = () => {
-  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+  // const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
 
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -34,10 +35,10 @@ const App = () => {
 
   useEffect(() => {
     if (currentUser) {
-      setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+      // setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
       setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
     } else {
-      setShowModeratorBoard(false);
+      // setShowModeratorBoard(false);
       setShowAdminBoard(false);
     }
 
@@ -54,7 +55,7 @@ const App = () => {
     <Router>
       <div>
         <nav className="navbar navbar-expand navbar-dark navbar-custom">
-          <Link to={"/"} className="navbar-brand" style={{ fontFamily: 'Gentona', fontSize: '32px', fontWeight: 'bold' }}>
+          <Link to={"/"} className="navbar-brand" style={{ fontFamily: 'Rextro', fontSize: '32px', fontWeight: 'bold' }}>
             Diamond
           </Link>
           <div className="navbar-nav mr-auto" style={{fontWeight:'bold'}}>
@@ -98,20 +99,34 @@ const App = () => {
           </div>
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto" style={{fontWeight:'bold'}}>
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                {currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={logOut}>
-                  LogOut
+            <div className="navbar-nav ml-auto" style={{ fontWeight: 'bold' }}>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="/#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {currentUser.avatar && (
+                    <img src={currentUser.avatar} alt="User Avatar" className="user-avatar" />
+                  )}
+                  {currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1)}
                 </a>
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <Link to={"/profile"} className="dropdown-item">
+                    Profile
+                  </Link>
+                  <a href="/login" className="dropdown-item" onClick={logOut}>
+                    Log Out
+                  </a>
+                </div>
               </li>
             </div>
           ) : (
-            <div className="navbar-nav ml-auto" style={{fontWeight:'bold'}}>
+            <div className="navbar-nav ml-auto" style={{ fontWeight: 'bold' }}>
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
                   Login
@@ -125,6 +140,7 @@ const App = () => {
               </li>
             </div>
           )}
+
         </nav>
 
         <div className="container mt-3">

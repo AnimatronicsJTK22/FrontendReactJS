@@ -57,6 +57,16 @@ const Home = () => {
           Diary and Money Discipline
         </h3>
 
+        <p className="text-center">"Diary and Money Discipline" is a web application that helps users 
+          manage their finances and develop disciplined spending habits. 
+          It serves as a digital diary and budgeting tool, allowing users 
+          to track expenses, set financial goals, and monitor progress. 
+          With features such as expense tracking, goal setting, budget management,
+          and detailed reports, the application simplifies financial management 
+          and encourages responsible spending. It offers secure access across 
+          devices, empowering individuals to take control of their finances and 
+          work towards their financial goals for improved financial well-being.</p>
+
         <hr></hr>
         <p></p>
         <div className="text-center" style={{ fontFamily: "Galimer", display: "flex", justifyContent: "space-around" }}>
@@ -72,6 +82,9 @@ const Home = () => {
           ))}
         </div>
       </header>
+      <footer>
+        <p className="text-center">&copy; 2023 fikreynurz. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
