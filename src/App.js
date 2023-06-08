@@ -55,7 +55,7 @@ const App = () => {
     <Router>
       <div>
         <nav className="navbar navbar-expand navbar-dark navbar-custom">
-          <Link to={"/"} className="navbar-brand" style={{ fontFamily: 'Rextro', fontSize: '32px', fontWeight: 'bold' }}>
+          <Link to={"/"} className="navbar-brand" style={{ fontFamily: 'Gotham-Bold', fontSize: '32px', fontWeight: 'bold' }}>
             Diamond
           </Link>
           <div className="navbar-nav mr-auto" style={{fontWeight:'bold'}}>

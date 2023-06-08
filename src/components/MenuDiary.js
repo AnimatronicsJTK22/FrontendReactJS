@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
-const BoardUser = () => {
+const MenuDiary = () => {
   const [content, setContent] = useState("");
 
   useEffect(() => {
@@ -79,4 +79,4 @@ const BoardUser = () => {
   );
 };
 
-export default BoardUser;
+export default MenuDiary;

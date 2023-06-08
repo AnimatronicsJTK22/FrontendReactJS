@@ -33,6 +33,10 @@ label {
 }
 
 .navbar-custom {
+  top: 10px;
+  border-radius: 30px;
+  right: 10px;
+  left: 10px;
   background-color: #044d91;
 }
 
